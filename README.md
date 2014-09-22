@@ -29,4 +29,3 @@ We're going to build off our previous iteration of our Blog App, where we create
 [Rails 4 Way: Nested Attributes Examples](http://beta-library.herokuapp.com/books/the-rails-4-way#page=362)
 
 [Preventing Empty Records](http://guides.rubyonrails.org/form_helpers.html#preventing-empty-records)
-
