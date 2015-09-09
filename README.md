@@ -1,8 +1,7 @@
 
-
 # Rails Blog: Complex Nested Forms
 
-We're going to build off our previous iteration of our Blog App, where we created new models for Users and Tags (and applicable associations) and wrote validations. We want to clean up our tagging feature. Our ability to add tags to a new post is super useful, but what if when we're making a new post, as want to add a new tag that isn't in the list? Let's build that out.
+We're going to build off our previous iteration of our Blog App, where we created new models for Users and Tags (and applicable associations) and wrote validations. We want to clean up our tagging feature. Our ability to add tags to a new post is super useful, but what if when we're making a new post, we want to add a new tag that isn't in the list? Let's build that out.
 
 <em>Before anything</em>, note that when you generate models, controllers, etc, be sure to include this option, so that it skips tests (which we already have): `--no-test-framework`
 
