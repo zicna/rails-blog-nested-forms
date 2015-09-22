@@ -13,7 +13,6 @@ describe 'nested form for tag in post', :type => :feature do
 
   it 'can create a post with a new tag' do 
     visit 'posts/new'
-    puts page.body
     within(all('.field').first) do
       fill_in('Name', :with => @post1.name)
       fill_in('Content', :with => @post1.content)
