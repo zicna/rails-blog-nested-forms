@@ -1,12 +1,42 @@
 #Guide to Solving and Reviewing Rails Blogs Nested Forms
 ##Overview
-This lab will teach you how to implement nested forms in your apps. In this example, we will nest tags under posts, so a user can submit a post that has many tags.
+This lab will teach you how to implement nested forms. In this example, we will nest tags under posts, so a user can submit a post that has many tags.
 
+###Step 1: Set up your app
+- `bin/rake db:migrate RAILS_ENV=test`
+- `bundle install`
+- `rails s` then visit `localhost:3000`
+- `rake db:seed`
 
-Let's start with our form.
+At this point we should have a form that will let us create a post, along with tags that we can select. Now we need a way to add a new tag, so let's add that to our form.
+
+###Step 2: Use fields_for to accept tags
+
+```ruby
+<div class="field">
+  <% 3.times do %>
+  <%= f.fields_for(:tags) do |tag_form| %>
+    <%= tag_form.label :name %>
+    <%= tag_form.text_field :name %>
+  <% end %>
+  <% end %>
+</div>
+
+```
+####Completed Form
 
 ```ruby
 <%= form_for(@post) do |f| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <ul>
+      <% @post.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <div class="field">
     <%= f.label :name %><br>
@@ -25,12 +55,15 @@ Let's start with our form.
     <% end %>
   </div>
 
+  <div class="field">
+    <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :name %><br>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
 
 <% end %>
-
 ```
 
 ####Before we go any further, let's break down what is happening above. 
@@ -51,6 +84,8 @@ Let's take a look at `@post` params in our console and see what is being returne
 }
 ```
 When we call `<%= f.label :name %>` in our form above, we are accessing the `:name` key in our hash, which is going to return the name of that post, same thing for `:content`, or any other key that is available in our params.
+
+###Step 3: Set up your PostsContrller
 
 ### PostsController
 
@@ -109,6 +144,9 @@ If we look at our form, we will see `<%= f.fields_for(:tags) do |tag_form| %>`. 
 
 In order to understand `accepts_nested_attributes_for`, we need to take a look at our models associations and the methods that were made available to us.
 
+***note that we have added `accepts_nested_attributes_for :tags` to our `Post` model**
+
+##Step 4: Set up Post model
 ### Models
 
 ```ruby
@@ -132,7 +170,6 @@ end
 By creating these associations, Rails gives us the methods below.
 
 ```ruby
-
 tag_ids()                    Post (Post::GeneratedAssociationMethods)
 tag_ids=(ids)                Post (Post::GeneratedAssociationMethods)
 tags(*args)                  Post (Post::GeneratedAssociationMethods)
@@ -150,7 +187,7 @@ def tags_attributes=(attributes_hash)
   end
 end
 ```
-Let's take a look at our console and see what our `attributes_hash` is.
+If we create three new tags and look at params in our console, we will see the following in our `attributes_hash`.
 
 ```ruby
 {
@@ -200,7 +237,8 @@ As you can see, along with our post `name` and `content` we have a nested hash c
 
 In order for us to successfully save our new post with its tags, we have to remember to whitelist our new data.
 
-Let's go ahead and update our `post_params` method in our `PostsController`.
+##Step 5: Update `post_params` in your `PostsController`
+
 
 ```ruby
 def post_params
@@ -208,3 +246,4 @@ def post_params
 end
 
 ```
+At this point you should be able to create a new post with related tags.
