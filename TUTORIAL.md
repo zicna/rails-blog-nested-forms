@@ -14,11 +14,9 @@ At this point we should have a form that will let us create a post, along with t
 
 ```ruby
 <div class="field">
-  <% 3.times do %>
   <%= f.fields_for(:tags) do |tag_form| %>
     <%= tag_form.label :name %>
     <%= tag_form.text_field :name %>
-  <% end %>
   <% end %>
 </div>
 
@@ -47,11 +45,9 @@ At this point we should have a form that will let us create a post, along with t
   </div>
 
   <div class="field">
-    <% 3.times do %>
     <%= f.fields_for(:tags) do |tag_form| %>
       <%= tag_form.label :name %>
       <%= tag_form.text_field :name %>
-    <% end %>
     <% end %>
   </div>
 
