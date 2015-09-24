@@ -1,3 +1,4 @@
+#Objective: This lab will teach you how to implement nested forms. In this example, we will nest tags under posts, so a user can submit a post that has many tags.
 
 # Rails Blog: Complex Nested Forms
 
