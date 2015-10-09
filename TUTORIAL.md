@@ -1,16 +1,47 @@
-#Guide to Solving and Reviewing Rails Blogs Nested Forms
-##Overview
-This lab will teach you how to implement nested forms. In this example, we will nest tags under posts, so a user can submit a post that has many tags.
+##Guide to Solving and Reviewing Rails Blogs Nested Forms
+
+###Objective
+- Implement a form with nested attributes.
 
 ###Step 1: Set up your app
-- `bin/rake db:migrate RAILS_ENV=test`
-- `bundle install`
-- `rails s` then visit `localhost:3000`
-- `rake db:seed`
+When working with an existing codebase, it's always a good idea to see what our app looks like in our browser. To do this we need to run a few commands in our console.
 
-At this point we should have a form that will let us create a post, along with tags that we can select. Now we need a way to add a new tag, so let's add that to our form.
+- `bundle install` Get all our gems in order
+- `bin/rake db:migrate RAILS_ENV=test` Setup the DB
+- `rails s` then visit `localhost:3000` Start our server
+- `rake db:seed` Seed our database
 
-###Step 2: Use fields_for to accept tags
+
+If you visit `http://localhost:3000/posts/new`, you can see we have a form that will let you create a post, along with tags that we can select. Let's go ahead and submit a post to make sure it works. It does, great! So we have a huge selection of tags, but what if we want to add a new one?
+
+###Step 2: Set up nested attributes
+The first thing we want to do is set up our `Post` model so it can accept our nested attributes, which will be tags. Rails gives us a method called `#accepts_nested_attributes_for`. "Nested attributes allow you to save attributes on associated records through the parent. By default nested attribute updating is turned off and you can enable it using the `#accepts_nested_attributes_for` class method. When you enable nested attributes an attribute writer is defined on the model."
+
+The attribute writer is named after the association, which means that in the following example, the follow method is added to your model:
+`tags_attributes=(attributes)`.
+
+Our model should now look like this:
+####`post.rb`
+
+```
+class Post < ActiveRecord::Base
+  belongs_to :user
+  has_many :comments
+  has_many :post_tags
+  has_many :tags, :through => :post_tags
+  accepts_nested_attributes_for :tags
+  validates_presence_of :name, :content
+end
+```
+
+###Step 3: Set up our form
+The next piece of this puzzle is our form. We have our attribute writer set up, so now let's add an input to our form so we can actually add a new tag.  
+
+####`posts/_form.html.erb`
+
+Here we are using `fields_for`, which will generate an input for our form. If you inspect the `html` of our form, you can see that our params are set up nicely, thanks to `accepts_nested_attributes_for`, which we have included in our `Post` model.
+
+`<input type="text" name="post[tags_attributes][0][name]" id="post_tags_attributes_0_name">`
 
 ```ruby
 <div class="field">
@@ -19,8 +50,12 @@ At this point we should have a form that will let us create a post, along with t
     <%= tag_form.text_field :name %>
   <% end %>
 </div>
-
 ```
+
+If you delete `accepts_nested_attributes_for :tags` from your `Post` model and refresh your browser, you will see the params have changed to the following.
+
+`<input type="text" name="post[tags][name]" id="post_tags_name">`
+
 ####Completed Form
 
 ```ruby
@@ -62,28 +97,28 @@ At this point we should have a form that will let us create a post, along with t
 <% end %>
 ```
 
-####Before we go any further, let's break down what is happening above. 
+####Before we go any further, let's break down what is happening above.
 
-Our `form_for` accepts `@post` as an argument, which is an instance of our `Post` class. We then pass it to the variable `f` to build our form.
+We are passing the `@post` variable to the `form_for` method. This method also takes in a block with a single argument to the block. That argument is a FormBuilder object. Take a look at <a href="http://guides.rubyonrails.org/form_helpers.html">this</a> documentation to read more. The FormBuilder object that is yielded to the block then contains all the information about the model that is passed in, and has an assortment of useful instance methods.
 
-Let's take a look at `@post` params in our console and see what is being returned. 
-
-
-```ruby
-#<Post:0x007fb3ad9e4e50> {
-            :id => 10,
-          :name => "Hello World!",
-       :content => "We are learning about fields_for!",
-       :user_id => nil,
-    :created_at => Thu, 09 Jul 2015 16:59:41 UTC +00:00,
-    :updated_at => Thu, 09 Jul 2015 16:59:41 UTC +00:00
-}
-```
-When we call `<%= f.label :name %>` in our form above, we are accessing the `:name` key in our hash, which is going to return the name of that post, same thing for `:content`, or any other key that is available in our params.
 
 ###Step 3: Set up your PostsContrller
 
 ### PostsController
+
+Ok so now we have our model set up and our form in place, let's visit `localhost:3000/posts/new` and see what our updated form looks like. Hmmm, we were expecting a text field so that we can add our new tag, which is what this code should be creating.
+
+[no input screenshot]
+
+```
+<div class="field">
+  <%= f.fields_for(:tags) do |tag_form| %>
+    <%= tag_form.label :name %>
+    <%= tag_form.text_field :name %>
+  <% end %>
+</div>
+```
+So what is going on? There is actually another thing we need to do for our form to work properly, which is update the `new` action of our `Posts` controller.
 
 ```ruby
 def new
@@ -91,10 +126,17 @@ def new
   @tag = @post.tags.build
 end
 ```
+Now if we refresh our browser we will see our updated form.
 
-Our controller is going to render our form, but what is this `build` method? Our `build` method was given to use via our model associations, which we will take a look at later. It creates a new object in memory, so that our view can use it to display something. In our case, since we are using `fields_for`, it will display fields for our tags! If you delete `@tag = @post.tags.build` from your controller, your fields would disappear.
+[new form screenshot]
 
-Ok, so we can build our form dynamically, but how does Rails know where to submit it to? Luckily for us, Rails is really smart. When we passed the `@post` object to `form_for`, it was able to check for an instance of that post in the database. Since it was a new instance, by convention it decided that we are trying to create a new post and should be submitted to `/posts` via a `post` method. Let's take a look at the HTML that was generated for us by `form_for`.
+Our controller is going to set up the data so that our view can render our form. But what is this `build` method? Our `build` method was given to us via our model associations.
+
+It creates a blank object in memory and sets up the association between `Post` and `Tag`. In our case, since we are using `fields_for`, it will display fields for our tags. If you delete `@tag = @post.tags.build` from your controller, your field would disappear. The `build` method creates a single instance, which `fields_for` then iterates over. If it did not exist in your controller, there would be nothing to iterate over.
+
+Additionally, if you called `build`, three times in your controller, it would create three different objects which would in turn give you three separate field in your form.
+
+Ok, so we can build our form dynamically, but how does Rails know where to submit it to? Since we are trying to create a new post and we have our routes set up correctly, Rails knows to submit to `/posts` via a `post` method. Let's take a look at the HTML that was generated for us by `form_for`.
 
 ####Generated HTML From Ruby
 
@@ -116,10 +158,10 @@ Ok, so we can build our form dynamically, but how does Rails know where to submi
   <div class="field">
     <label for="post_tags_attributes_0_name">Name</label>
     <input type="text" name="post[tags_attributes][0][name]" id="post_tags_attributes_0_name" />
-  
+
     <label for="post_tags_attributes_1_name">Name</label>
     <input type="text" name="post[tags_attributes][1][name]" id="post_tags_attributes_1_name" />
-  
+
     <label for="post_tags_attributes_2_name">Name</label>
     <input type="text" name="post[tags_attributes][2][name]" id="post_tags_attributes_2_name" />
   </div>
@@ -136,53 +178,8 @@ In the first section of our form, we can see our form helper generated `post[nam
 #### `fields_for`
 Let's focus on our tag fields for a second, how did Rails know to create such a nicely nested structure?
 
-If we look at our form, we will see `<%= f.fields_for(:tags) do |tag_form| %>`. Our `fields_for` accepts a `:tags` object and by convention introspects into our `Post` model to see if it has a way to accept this new object. It is specifically looking for a macro called `accepts_nested_attributes_for :tags`. If it finds it, it will generate the nicely nested form that we see above.
+If we look at our form, we will see `<%= f.fields_for(:tags) do |tag_form| %>`. Our `fields_for` accepts a `:tags` object and introspects into our `Post` model because the `FormBuilder` object already knows about Post from your form_for. It would be impossible for the fields_for to know it's talking to `Post` without the f thing
 
-In order to understand `accepts_nested_attributes_for`, we need to take a look at our models associations and the methods that were made available to us.
-
-***note that we have added `accepts_nested_attributes_for :tags` to our `Post` model**
-
-##Step 4: Set up Post model
-### Models
-
-```ruby
-class Post < ActiveRecord::Base
-  has_many :post_tags
-  has_many :tags, :through => :post_tags
-
-  accepts_nested_attributes_for :tags
-end
-
-class PostTag < ActiveRecord::Base
-  belongs_to :post
-  belongs_to :tag
-end
-
-class Tag < ActiveRecord::Base
-  has_many :post_tags
-  has_many :posts, :through => :post_tags
-end
-```
-By creating these associations, Rails gives us the methods below.
-
-```ruby
-tag_ids()                    Post (Post::GeneratedAssociationMethods)
-tag_ids=(ids)                Post (Post::GeneratedAssociationMethods)
-tags(*args)                  Post (Post::GeneratedAssociationMethods)
-tags=(value)                 Post (Post::GeneratedAssociationMethods)
-tags_attributes=(attributes) Post (Post::GeneratedAssociationMethods)
-```
-What we are interested in right now is `tags_attributes=(attributes)`
-
-As mentioned before, our `fields_for` is looking for `accepts_nested_attributes_for :tags`. But what exactly does this macro give us? Let's define our own and see.
-
-```ruby
-def tags_attributes=(attributes_hash)
-  attributes_hash.values.each do |attributes|
-    self.tags.build(attributes)
-  end
-end
-```
 If we create three new tags and look at params in our console, we will see the following in our `attributes_hash`.
 
 ```ruby
@@ -233,7 +230,7 @@ As you can see, along with our post `name` and `content` we have a nested hash c
 
 In order for us to successfully save our new post with its tags, we have to remember to whitelist our new data.
 
-##Step 5: Update `post_params` in your `PostsController`
+##Step 4: Update `post_params` in your `PostsController`
 
 
 ```ruby
