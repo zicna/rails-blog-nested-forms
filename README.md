@@ -1,6 +1,10 @@
+#Objectives:
+1. Submit a form with nested attributes.
+2. Identify the relationship between form_for and fields_for class methods.
+
 # Rails Blog: Complex Nested Forms
 
-We're going to build off the previous iteration of our Blog App, where we created new models for `User` and `Tag` (and applicable associations) and wrote validations. We want to clean up our tagging feature. Our ability to add tags to a new post is super useful, but what if, when we're making a new post, we want to add a new tag that isn't in the list? Let's build that out.
+We're going to build off our previous iteration of our Blog App, where we created new models for Users and Tags (and applicable associations) and wrote validations. We want to clean up our tagging feature. Our ability to add tags to a new post is super useful, but what if when we're making a new post, we want to add a new tag that isn't in the list? Let's build that out.
 
 ***NOTE***: As with much of our Rails curriculum, remember to always use the `--no-test-framework` flag when you generate models, controllers, etc. That way, the Rails generators will not create additional tests on top of the test suite that already comes with the lesson. E.g., `rails g model User username:string email:string --no-test-framework`. However, it is not needed for this lab as we've provided the starter files.
 
@@ -21,10 +25,6 @@ We're going to build off the previous iteration of our Blog App, where we create
   ```
 7. To allow a user to create a new tag, the controller action for a new post should instantiate a new tag. Check out the documentation for the [`fields_for` tag](http://apidock.com/rails/ActionView/Helpers/FormBuilder/fields_for).
 
-## Resources
-* [Strong Params](http://edgeguides.rubyonrails.org/action_controller_overview.html#strong-parameters)
-* [Nested Forms](http://guides.rubyonrails.org/form_helpers.html#nested-forms)
-* [`fields_for` tag](http://apidock.com/rails/ActionView/Helpers/FormBuilder/fields_for)
-* [Preventing Empty Records](http://guides.rubyonrails.org/form_helpers.html#preventing-empty-records)
+[fields_for tag](http://apidock.com/rails/ActionView/Helpers/FormBuilder/fields_for)
 
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/rails-blog-nested-forms' title='Rails Blog: Complex Nested Forms'>Rails Blog: Complex Nested Forms</a> on Learn.co and start learning to code for free.</p>
+[Preventing Empty Records](http://guides.rubyonrails.org/form_helpers.html#preventing-empty-records)
