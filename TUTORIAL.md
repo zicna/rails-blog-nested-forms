@@ -14,12 +14,15 @@ When working with an existing codebase, it's always a good idea to see what our 
 - `rake db:seed` Seed our database
 
 
-If you visit `http://localhost:3000/posts/new`, you can see we have a form that will let you create a post, along with tags that we can select. Let's go ahead and submit a post to make sure it works. It does, great! So we have a huge selection of tags, but what if we want to add a new one?
+If you visit `http://localhost:3000/posts/new`, you can see we have a form that will let you create a post, along with tags that we can select. Let's go ahead and submit a post to make sure it works. It does, great!
+
+So we have a huge selection of tags, but what if we want to add a new one?
+<img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true" width="50%">
 
 ###Step 2: Set up nested attributes
 The first thing we want to do is set up our `Post` model so it can accept our nested attributes, which will be tags. Rails gives us a method called `#accepts_nested_attributes_for`. "Nested attributes allow you to save attributes on associated records through the parent. By default nested attribute updating is turned off and you can enable it using the `#accepts_nested_attributes_for` class method. When you enable nested attributes an attribute writer is defined on the model."
 
-The attribute writer is named after the association, which means that in the following example, the follow method is added to your model:
+The attribute writer is named after the association, in our case the following method is added to our `Post` model:
 `#tags_attributes=(attributes)`. You can read more about it <a href="http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html">here</a>.
 
 Our model should now look like this:
@@ -41,7 +44,7 @@ The next piece of this puzzle is our form. We have our attribute writer set up, 
 
 ####`posts/_form.html.erb`
 
-Notice we are using `#fields_for`. This method creates a scope around a specific model object, which in our case is `#form_for`, but doesn't create the form tags themselves. This makes `#fields_for` suitable for specifying additional model objects in the same form.
+Notice we are using `#fields_for`. This method creates a scope around a specific model object, which is `#form_for`, but doesn't create the form tags themselves. This makes `#fields_for` suitable for specifying additional model objects in the same form. Reade more <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for"here</a>.
 
 If you inspect the `html` of our form, you can see that our params are set up nicely, thanks to `#accepts_nested_attributes_for`, which we have included in our `Post` model.
 
@@ -116,10 +119,9 @@ Ok so now we have our model set up and our form in place, let's visit `localhost
 </div>
 
 ```
-
 <img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true" width="50%">
 
-So what is going on? There is actually another thing we need to do for our form to work properly, which is update the `new` action of our `Posts` controller.
+So what is going on? There is one more thing we need to do for our form to render properly, which is update the `new` action of our `Posts` controller.
 
 ```ruby
 def new
@@ -133,10 +135,13 @@ Now if we refresh our browser we will see our updated form.
 
 Our controller is now setting up the data so that our view can render our form using the`build` method. Our `build` method was given to us via our model associations.
 
-It creates a blank object in memory and sets up the association between `Post` and `Tag`. In our case, since we are using `fields_for`, it will display fields for our tags. If you delete `@tag = @post.tags.build` from your controller, your field would disappear. The `build` method creates a single instance, which `fields_for` then iterates over.
+"The `build` method returns one or more new objects of the collection type that have been instantiated with attributes and linked to this object through a foreign key, but have not yet been saved. Note: This only works if an associated object already exists, not if it‘s nil."
 
-Additionally, if you called `build`, three times in your controller, it would create three different objects which would in turn give you three separate field in your form.
+If you delete `@tag = @post.tags.build` from your controller, your tag input field would disappear. This is because the `build` method creates a single instance in memory, which `fields_for` then iterates over.
 
+Additionally, if you called `build`, three times in your controller, it would create three different objects which would in turn give you three separate fields in your form.
+
+If we take a look at our `params`, we can see they now have the following structure.
 ####Params
 
 ```ruby
@@ -159,7 +164,7 @@ Additionally, if you called `build`, three times in your controller, it would cr
 ```
 As you can see, along with our post `name` and `content` we have a nested hash called `tags_attributes`. These attributes will be written via our `accepts_nested_attributes_for` method.
 
-Ok, so we can build our form dynamically, but how does Rails know where to submit it to? Since we are trying to create a new post and we have our routes set up correctly, Rails knows to submit to `/posts` via a `post` method. Let's take a look at the HTML that was generated for us by `form_for`.
+Now we can build our form dynamically, but how does Rails know where to submit it to? Since we are trying to create a new post and we have our routes set up correctly, Rails knows to submit to `/posts` via a `post` method. Let's take a look at the HTML that was generated for us by `form_for`.
 
 ####Generated HTML From Ruby
 
@@ -189,7 +194,6 @@ Ok, so we can build our form dynamically, but how does Rails know where to submi
 
 </form>
 ```
-
 
 In order for us to successfully save our new post with its tags, we have to remember to whitelist our new data.
 
