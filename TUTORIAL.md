@@ -117,7 +117,6 @@ Ok so now we have our model set up and our form in place, let's visit `localhost
     <%= tag_form.text_field :name %>
   <% end %>
 </div>
-
 ```
 <img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true" width="50%">
 
