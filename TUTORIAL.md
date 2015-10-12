@@ -44,7 +44,7 @@ The next piece of this puzzle is our form. We have our attribute writer set up, 
 
 ####`posts/_form.html.erb`
 
-Notice we are using `#fields_for`. This method creates a scope around a specific model object, which is `#form_for`, but doesn't create the form tags themselves. This makes `#fields_for` suitable for specifying additional model objects in the same form. Reade more<a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for">here</a>.
+Notice we are using `#fields_for`. This method creates a scope around a specific model object, which is `#form_for`, but doesn't create the form tags themselves. This makes `#fields_for` suitable for specifying additional model objects in the same form. Reade more <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for">here</a>.
 
 If you inspect the `html` of our form, you can see that our params are set up nicely, thanks to `#accepts_nested_attributes_for`, which we have included in our `Post` model.
 
