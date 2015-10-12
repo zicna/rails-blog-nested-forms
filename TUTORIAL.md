@@ -107,7 +107,7 @@ If you delete `accepts_nested_attributes_for :tags` from your `Post` model and r
 
 Ok so now we have our model set up and our form in place, let's visit `localhost:3000/posts/new` and see what our updated form looks like. Hmmm, we were expecting a text field so that we can add our new tag, which is what this code should be creating.
 
-!(https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true)
+<img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true" width="50%">
 
 
 ```
@@ -128,7 +128,7 @@ end
 ```
 Now if we refresh our browser we will see our updated form.
 
-!(https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/build.jpg?raw=true)
+<img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/build.jpg?raw=true" width="50%">
 
 Our controller is now setting up the data so that our view can render our form using the`build` method. Our `build` method was given to us via our model associations.
 
