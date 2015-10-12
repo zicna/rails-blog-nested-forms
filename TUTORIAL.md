@@ -107,9 +107,6 @@ If you delete `accepts_nested_attributes_for :tags` from your `Post` model and r
 
 Ok so now we have our model set up and our form in place, let's visit `localhost:3000/posts/new` and see what our updated form looks like. Hmmm, we were expecting a text field so that we can add our new tag, which is what this code should be creating.
 
-<img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true" width="50%">
-
-
 ```
 <div class="field">
   <%= f.fields_for(:tags) do |tag_form| %>
@@ -117,7 +114,11 @@ Ok so now we have our model set up and our form in place, let's visit `localhost
     <%= tag_form.text_field :name %>
   <% end %>
 </div>
+
 ```
+
+<img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true" width="50%">
+
 So what is going on? There is actually another thing we need to do for our form to work properly, which is update the `new` action of our `Posts` controller.
 
 ```ruby
@@ -180,12 +181,6 @@ Ok, so we can build our form dynamically, but how does Rails know where to submi
   <div class="field">
     <label for="post_tags_attributes_0_name">Name</label>
     <input type="text" name="post[tags_attributes][0][name]" id="post_tags_attributes_0_name" />
-
-    <label for="post_tags_attributes_1_name">Name</label>
-    <input type="text" name="post[tags_attributes][1][name]" id="post_tags_attributes_1_name" />
-
-    <label for="post_tags_attributes_2_name">Name</label>
-    <input type="text" name="post[tags_attributes][2][name]" id="post_tags_attributes_2_name" />
   </div>
 
   <div class="actions">
