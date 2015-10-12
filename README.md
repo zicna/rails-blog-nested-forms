@@ -1,3 +1,6 @@
+#Objectives:
+1. Submit a form with nested attributes.
+2. Identify the relationship between form_for and fields_for class methods.
 
 # Rails Blog: Complex Nested Forms
 
