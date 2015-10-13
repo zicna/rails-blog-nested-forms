@@ -1,9 +1,8 @@
 ##Guide to Solving and Reviewing Rails Blogs Nested Forms
 
 ###Objective
-- Submit a form with nested attributes.
-- Identify the relationship between `form_for` and `fields_for` class methods.
-
+1. Submit a form with nested attributes.
+2. Identify the relationship between `form_for` and `fields_for` class methods.
 
 ###Step 1: Set up your app
 When working with an existing codebase, it's always a good idea to see what our app looks like in our browser. To do this we need to run a few commands in our console.
@@ -17,13 +16,16 @@ When working with an existing codebase, it's always a good idea to see what our 
 If you visit `http://localhost:3000/posts/new`, you can see we have a form that will let you create a post, along with tags that we can select. Let's go ahead and submit a post to make sure it works. It does, great!
 
 So we have a huge selection of tags, but what if we want to add a new one?
-<img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true" width="50%">
 
-###Step 2: Set up nested attributes
-The first thing we want to do is set up our `Post` model so it can accept our nested attributes, which will be tags. Rails gives us a method called `#accepts_nested_attributes_for`. "Nested attributes allow you to save attributes on associated records through the parent. By default nested attribute updating is turned off and you can enable it using the `#accepts_nested_attributes_for` class method. When you enable nested attributes an attribute writer is defined on the model."
+![](https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true)
+
+As our app stands right now, we can create posts and tags separately via two form submissions. But why would we want to do that? Most modern day blogs let you create a post, tag it and then submit it in one fell swoop, so let's set that up. In order to do this, we can use a class method called `#nested_attributes_for` given to us by our model associations.
+
+###Step 2: Nested attributes
+"Nested attributes allow you to save attributes on associated records through the parent. By default nested attribute updating is turned off and you can enable it using the `#accepts_nested_attributes_for` class method. When you enable nested attributes an attribute writer is defined on the model."
 
 The attribute writer is named after the association, in our case the following method is added to our `Post` model:
-`#tags_attributes=(attributes)`. You can read more about it <a href="http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html">here</a>.
+`#tags_attributes=(attributes)`. You can read more about it [here](http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html).
 
 Our model should now look like this:
 ####`post.rb`
@@ -44,7 +46,8 @@ The next piece of this puzzle is our form. We have our attribute writer set up, 
 
 ####`posts/_form.html.erb`
 
-Notice we are using `#fields_for`. This method creates a scope around a specific model object, which is `#form_for`, but doesn't create the form tags themselves. This makes `#fields_for` suitable for specifying additional model objects in the same form. Reade more <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for">here</a>.
+Notice we are using `#fields_for`. This method creates a scope around a specific model object, which is `#form_for`, but doesn't create the form tags themselves. This makes `#fields_for` suitable for specifying additional model objects in the same form.
+Read more [here](http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-fields_for).
 
 If you inspect the `html` of our form, you can see that our params are set up nicely, thanks to `#accepts_nested_attributes_for`, which we have included in our `Post` model.
 
@@ -118,7 +121,8 @@ Ok so now we have our model set up and our form in place, let's visit `localhost
   <% end %>
 </div>
 ```
-<img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true" width="50%">
+
+![](https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/nobuild.jpg?raw=true)
 
 So what is going on? There is one more thing we need to do for our form to render properly, which is update the `new` action of our `Posts` controller.
 
