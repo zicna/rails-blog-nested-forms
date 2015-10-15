@@ -1,6 +1,6 @@
 ##Guide to Solving and Reviewing Rails Blogs Nested Forms
 
-###Objective
+###Objectives
 1. Submit a form with nested attributes.
 2. Identify the relationship between `#form_for` and `#fields_for` class methods.
 
@@ -149,7 +149,7 @@ end
 ```
 Now if we refresh our browser we will see our updated form.
 
-<img src="https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/build.jpg?raw=true" width="50%">
+![](https://github.com/learn-co-curriculum/rails-blog-nested-forms/blob/ea837ba87a44f7cb39e8d10233dcd68984f9b40a/app/assets/images/build.jpg?raw=true)
 
 Our controller is now setting up the data so that our view can render our form using the`build` method. Our `build` method was given to us via our model associations.
 
