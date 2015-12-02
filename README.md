@@ -21,3 +21,5 @@ We're going to build off our previous iteration of our Blog App, where we create
 [fields_for tag](http://apidock.com/rails/ActionView/Helpers/FormBuilder/fields_for)
 
 [Preventing Empty Records](http://guides.rubyonrails.org/form_helpers.html#preventing-empty-records)
+
+<a href='https://learn.co/lessons/rails-blog-nested-forms' data-visibility='hidden'>View this lesson on Learn.co</a>
