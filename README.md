@@ -30,4 +30,4 @@ We're going to build off our previous iteration of our Blog App, where we create
 
 [Preventing Empty Records](http://guides.rubyonrails.org/form_helpers.html#preventing-empty-records)
 
-<a href='https://learn.co/lessons/rails-blog-nested-forms' data-visibility='hidden'>View this lesson on Learn.co</a>
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/rails-blog-nested-forms' title='Rails Blog: Complex Nested Forms'>Rails Blog: Complex Nested Forms</a> on Learn.co and start learning to code for free.</p>
