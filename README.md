@@ -13,7 +13,7 @@ We're going to build off our previous iteration of our Blog App, where we create
 5. Remember, because we have a uniqueness validation on the name of tag, we will need to account for that; a user shouldn't have to submit a new tag every time they submit a post.
 
 ```ruby
-class Member < ActiveRecord::Base
+class User < ActiveRecord::Base
   has_many :posts
   accepts_nested_attributes_for :posts, reject_if: proc { |attributes| attributes['title'].blank? }
 end
