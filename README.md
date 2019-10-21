@@ -2,7 +2,7 @@
 
 We're going to build off the previous iteration of our Blog App, where we created new models for `User` and `Tag` (and applicable associations) and wrote validations. We want to clean up our tagging feature. Our ability to add tags to a new post is super useful, but what if, when we're making a new post, we want to add a new tag that isn't in the list? Let's build that out.
 
-***NOTE***: As with much of our Rails curriculum, remember to always use the `--no-test-framework` flag when you generate models, controllers, etc. That way, the Rails generators will not create additional tests on top of the test suite that already comes with the lesson. E.g., `rails g model User username:string email:string --no-test-framework`.
+***NOTE***: As with much of our Rails curriculum, remember to always use the `--no-test-framework` flag when you generate models, controllers, etc. That way, the Rails generators will not create additional tests on top of the test suite that already comes with the lesson. E.g., `rails g model User username:string email:string --no-test-framework`. However, it is not needed for this lab as we've provided the starter files.
 
 ## Tags
 
