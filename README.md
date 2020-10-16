@@ -26,5 +26,3 @@ We're going to build off the previous iteration of our Blog App, where we create
 * [Nested Forms](http://guides.rubyonrails.org/form_helpers.html#nested-forms)
 * [`fields_for` tag](http://apidock.com/rails/ActionView/Helpers/FormBuilder/fields_for)
 * [Preventing Empty Records](http://guides.rubyonrails.org/form_helpers.html#preventing-empty-records)
-
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/rails-blog-nested-forms' title='Rails Blog: Complex Nested Forms'>Rails Blog: Complex Nested Forms</a> on Learn.co and start learning to code for free.</p>
