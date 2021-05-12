@@ -9,7 +9,8 @@
       <% end %>
       </ul>
     </div>
-  <% end %>
+    <% end %>
+ 
 
   <div class="field">
     <%= f.label :name %><br>
@@ -20,7 +21,7 @@
 
   <div class="field">
     Tags:<br>
-      <%= fields_for :tags, @post.tags.build do |ff|%>
+      <%= f.fields_for :tags, @post.tags.build do |ff|%>
           <%= ff.label :name, "tag name"  %>
           <input type="text" name="post_tag_name" id="name">
       <% end %>
