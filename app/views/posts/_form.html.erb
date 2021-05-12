@@ -20,16 +20,14 @@
   </div>
 
   <div class="field">
-    Tags:<br>
+    <span>Tags:</span>
       <%= f.fields_for :tags, @post.tags.build do |ff|%>
-          <%= ff.label :name, "tag name"  %>
-          <input type="text" name="post_tag_name" id="name">
+          <%= ff.label :name %>
+          <%= ff.text_field :name%>
       <% end %>
   </div>
 
-  <div class="field">
     <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :name %><br>
-  </div>
 
   <div class="actions">
     <%= f.submit %>
