@@ -16,7 +16,14 @@
     <%= f.text_field :name %><br>
     <%= f.label :content %><br>
     <%= f.text_area :content %><br>
-    Tags:
+  </div>
+
+  <div class="field">
+    Tags:<br>
+      <%= fields_for :tags, @post.tags.build do |ff|%>
+          <%= ff.label :name, "tag name"  %>
+          <input type="text" name="post_tag_name" id="name">
+      <% end %>
   </div>
 
   <div class="field">
